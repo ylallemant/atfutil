@@ -46,7 +46,7 @@ var allocCmd = &cobra.Command{
 func init() {
 	// Alloc-specific flags
 	allocCmd.Flags().IntP("size", "s", -1, "size of the network to allocate")
-	allocCmd.Flags().StringP("id", "I", "", "ID for the allocated block")
+	allocCmd.Flags().StringP("id", "i", "", "ID for the allocated block")
 	allocCmd.Flags().StringP("description", "d", "", "description for the newly allocated subnet")
 
 	// Bind flags to viper

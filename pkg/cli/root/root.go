@@ -29,6 +29,7 @@ import (
 	"github.com/spf13/viper"
 
 	"atfutil/pkg/cli/allocate"
+	"atfutil/pkg/cli/binary/version"
 	"atfutil/pkg/cli/cidr"
 	"atfutil/pkg/cli/list"
 	"atfutil/pkg/cli/release"
@@ -62,6 +63,7 @@ func init() {
 	rootCmd.AddCommand(release.Command())
 	rootCmd.AddCommand(cidr.Command())
 	rootCmd.AddCommand(list.Command())
+	rootCmd.AddCommand(version.Command())
 }
 
 func initConfig() {
