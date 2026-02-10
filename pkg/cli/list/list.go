@@ -23,7 +23,7 @@ package list
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 
 	"github.com/go-yaml/yaml"
@@ -115,7 +115,7 @@ func getInputFile(inputFilename string) (*os.File, error) {
 }
 
 func loadAtfFromFile(inputFile *os.File) (*atf.File, error) {
-	data, err := ioutil.ReadAll(inputFile)
+	data, err := io.ReadAll(inputFile)
 	if err != nil {
 		return nil, err
 	}

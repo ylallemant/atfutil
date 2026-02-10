@@ -23,7 +23,7 @@ package release
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net"
 	"os"
 
@@ -177,7 +177,7 @@ func getOutputFile(outputFilename string) (*os.File, error) {
 }
 
 func loadAtfFromFile(inputFile *os.File) (*atf.File, error) {
-	data, err := ioutil.ReadAll(inputFile)
+	data, err := io.ReadAll(inputFile)
 	if err != nil {
 		return nil, err
 	}

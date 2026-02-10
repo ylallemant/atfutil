@@ -25,7 +25,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 
 	"github.com/go-yaml/yaml"
@@ -144,7 +143,7 @@ func getOutputFile(outputFilename string) (*os.File, error) {
 }
 
 func loadAtfFromFile(inputFile *os.File) (*atf.File, error) {
-	data, err := ioutil.ReadAll(inputFile)
+	data, err := io.ReadAll(inputFile)
 	if err != nil {
 		return nil, err
 	}
