@@ -2,6 +2,20 @@
 
 a simple IPAM tool in go that stores allocations and arbitrary metadata in YAML, allows you to allocate from the smallest fitting block and renders allocations (and optionally the space between allocations) to a markdown table.
 
+## Binary
+
+### Installation
+
+the latest version:
+```sh
+curl -fsSL https://github.com/ylallemant/atfutil/raw/main/install.sh | bash
+```
+
+a specific version:
+```sh
+curl -fsSL https://github.com/ylallemant/atfutil/raw/main/install.sh | bash -s -- --version=x.y.z
+```
+
 ## Superblocks
 
 [10.99.0.0/16](example/10.99.0.0-16.md)
