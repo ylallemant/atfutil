@@ -1,4 +1,26 @@
 /atfutil
 .DS_Store
-/.idea
-/.vscode
+
+# editors
+.idea/
+.vscode/
+.history/
+
+# helm
+**/.charts
+
+# secret protection
+**/*.env
+**/ovh.conf
+
+# Local .terraform directories
+.terraform/
+.local/
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
