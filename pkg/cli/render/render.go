@@ -62,7 +62,7 @@ func Command() *cobra.Command {
 func runRender(cmd *cobra.Command, args []string) {
 	outBuffer := &bytes.Buffer{}
 
-	inputFilename := viper.GetString("input-file")
+	inputFilename := viper.GetString("file")
 	inFile, err := getInputFile(inputFilename)
 	if err != nil {
 		quitWithError(err)
@@ -89,7 +89,7 @@ func runRender(cmd *cobra.Command, args []string) {
 		quitWithError(errors.New("unknown render format"))
 	}
 
-	outputFilename := viper.GetString("output-file")
+	outputFilename := viper.GetString("output")
 	outFile, err := getOutputFile(outputFilename)
 	if err != nil {
 		quitWithError(err)

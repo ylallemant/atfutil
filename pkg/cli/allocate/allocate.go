@@ -47,16 +47,12 @@ func init() {
 	// Alloc-specific flags
 	allocCmd.Flags().IntP("size", "s", -1, "size of the network to allocate")
 	allocCmd.Flags().StringP("id", "I", "", "ID for the allocated block")
-	allocCmd.Flags().StringP("parent", "p", "", "ID of the parent block to allocate from")
 	allocCmd.Flags().StringP("description", "d", "", "description for the newly allocated subnet")
-	allocCmd.Flags().Bool("in-place", false, "modify the input file in place")
 
 	// Bind flags to viper
 	viper.BindPFlag("size", allocCmd.Flags().Lookup("size"))
 	viper.BindPFlag("id", allocCmd.Flags().Lookup("id"))
-	viper.BindPFlag("parent", allocCmd.Flags().Lookup("parent"))
 	viper.BindPFlag("description", allocCmd.Flags().Lookup("description"))
-	viper.BindPFlag("in-place", allocCmd.Flags().Lookup("in-place"))
 }
 
 // Command returns the alloc command
@@ -65,13 +61,12 @@ func Command() *cobra.Command {
 }
 
 func runAlloc(cmd *cobra.Command, args []string) {
-	outputFilename := viper.GetString("output-file")
-	inputFilename := viper.GetString("input-file")
-	inPlace, _ := cmd.Flags().GetBool("in-place")
+	outputFilename := viper.GetString("output")
+	inputFilename := viper.GetString("file")
 
-	// output filename is set and in-place is set
-	if outputFilename != "-" && inPlace {
-		quitWithError(errors.New("cannot use --output-file and --in-place at the same time"))
+	// Default output to input file
+	if outputFilename == "-" {
+		outputFilename = inputFilename
 	}
 
 	inFile, err := getInputFile(inputFilename)
@@ -94,7 +89,6 @@ func runAlloc(cmd *cobra.Command, args []string) {
 
 	allocSize, _ := cmd.Flags().GetInt("size")
 	allocID, _ := cmd.Flags().GetString("id")
-	allocParent, _ := cmd.Flags().GetString("parent")
 	allocDesc, _ := cmd.Flags().GetString("description")
 
 	if allocSize > netcalc.AWS_MIN_SUBNET_SIZE || allocSize <= superAllocSize {
@@ -113,31 +107,11 @@ func runAlloc(cmd *cobra.Command, args []string) {
 		Description: allocDesc,
 	}
 
-	// If parent is specified, add as sub-allocation
-	if allocParent != "" {
-		found := false
-		for _, alloc := range atfFile.Allocations {
-			if alloc.Ident == allocParent {
-				alloc.SubAlloc = append(alloc.SubAlloc, newAlloc)
-				found = true
-				break
-			}
-		}
-		if !found {
-			quitWithError(errors.Errorf("parent allocation with ID %s not found", allocParent))
-		}
-	} else {
-		atfFile.Allocations = append(atfFile.Allocations, newAlloc)
-	}
+	atfFile.Allocations = append(atfFile.Allocations, newAlloc)
 
 	outBytes, err := yaml.Marshal(atfFile)
 	if err != nil {
 		quitWithError(err)
-	}
-
-	// output filename is not set and in-place is set
-	if outputFilename == "-" && inPlace {
-		outputFilename = inputFilename
 	}
 
 	outFile, err := getOutputFile(outputFilename)

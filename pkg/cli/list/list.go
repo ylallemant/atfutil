@@ -49,7 +49,7 @@ func Command() *cobra.Command {
 }
 
 func runList(cmd *cobra.Command, args []string) {
-	inputFilename := viper.GetString("input-file")
+	inputFilename := viper.GetString("file")
 
 	inFile, err := getInputFile(inputFilename)
 	if err != nil {

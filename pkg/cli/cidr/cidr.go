@@ -44,11 +44,9 @@ var cidrCmd = &cobra.Command{
 }
 
 func init() {
-	cidrCmd.Flags().StringP("id", "I", "", "ID of the block to show CIDR for")
+	cidrCmd.Flags().StringP("id", "i", "", "ID of the block to show CIDR for")
 	cidrCmd.Flags().BoolP("allocate", "a", false, "if the block does not exist, allocate it")
-	cidrCmd.Flags().StringP("parent", "p", "", "ID of the parent block to allocate from (used with --allocate)")
 	cidrCmd.Flags().IntP("size", "s", -1, "size of the network to allocate (required with --allocate)")
-	cidrCmd.Flags().Bool("in-place", false, "modify the input file in place (used with --allocate)")
 }
 
 func Command() *cobra.Command {
@@ -56,14 +54,12 @@ func Command() *cobra.Command {
 }
 
 func runCIDR(cmd *cobra.Command, args []string) {
-	inputFilename := viper.GetString("input-file")
-	outputFilename := viper.GetString("output-file")
+	inputFilename := viper.GetString("file")
+	outputFilename := viper.GetString("output")
 
 	blockID, _ := cmd.Flags().GetString("id")
 	allocateIfMissing, _ := cmd.Flags().GetBool("allocate")
-	allocParent, _ := cmd.Flags().GetString("parent")
 	allocSize, _ := cmd.Flags().GetInt("size")
-	inPlace, _ := cmd.Flags().GetBool("in-place")
 
 	inFile, err := getInputFile(inputFilename)
 	if err != nil {
@@ -132,22 +128,7 @@ func runCIDR(cmd *cobra.Command, args []string) {
 		Network: &atf.IPNet{IPNet: net},
 	}
 
-	// If parent is specified, add as sub-allocation
-	if allocParent != "" {
-		found := false
-		for _, alloc := range atfFile.Allocations {
-			if alloc.Ident == allocParent {
-				alloc.SubAlloc = append(alloc.SubAlloc, newAlloc)
-				found = true
-				break
-			}
-		}
-		if !found {
-			quitWithError(errors.Errorf("parent allocation with ID %s not found", allocParent))
-		}
-	} else {
-		atfFile.Allocations = append(atfFile.Allocations, newAlloc)
-	}
+	atfFile.Allocations = append(atfFile.Allocations, newAlloc)
 
 	fmt.Println(net.String())
 
@@ -156,21 +137,20 @@ func runCIDR(cmd *cobra.Command, args []string) {
 		quitWithError(err)
 	}
 
-	if outputFilename == "-" && inPlace {
+	// Default output to input file
+	if outputFilename == "-" {
 		outputFilename = inputFilename
 	}
 
-	if inPlace || outputFilename != "-" {
-		outFile, err := getOutputFile(outputFilename)
-		if err != nil {
-			quitWithError(err)
-		}
-		defer outFile.Close()
+	outFile, err := getOutputFile(outputFilename)
+	if err != nil {
+		quitWithError(err)
+	}
+	defer outFile.Close()
 
-		_, err = outFile.Write(outBytes)
-		if err != nil {
-			quitWithError(err)
-		}
+	_, err = outFile.Write(outBytes)
+	if err != nil {
+		quitWithError(err)
 	}
 
 	os.Exit(0)

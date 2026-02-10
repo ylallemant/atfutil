@@ -1,12 +1,16 @@
 # Project Context
 
-This is a command line tool to provide a simple IPAM tool.
+This is a command line tool to provide a simple IPAM tool for allocating and managing CIDR blocks. It uses a file to store the superblock and allocated blocks, allowing for easy tracking and management of IP address space.
 
 ## Key Concepts
 
-- use file to store a superblock and a list of allocated blocks
-- superblock contains the total CIDR and the block size
-- blocks are allocated from the superblock and tracked in the file
+- superblock: a CIDR block that represents the total available IP address space
+- block: a CIDR block that is allocated from the superblock and can be assigned to a specific use or entity
+- allocated blocks are tracked in a file, which allows for easy management and validation of the IP address space
+- blocks are allocated in such a way that the allocated IP space is as compact as possible, minimizing fragmentation and maximizing the efficient use of the available IP address space.
+
+## Global Flags
+- --file or -f : specify the file to use for storing the superblock and allocated blocks
 
 ## Commands
 
@@ -16,6 +20,7 @@ Allocate a block from the superblock and add it to the file.
 - --size or -s : specify the size of the block to allocate (default is the block size defined in the superblock)
 - --id or -i : specify an ID for the allocated block
 - --parent or -p : specify an ID for the parent block
+- --output or -o : specify the output file (default is the input file)
 - --description or -d : optional, specify a description for the allocated block
 
 ### release
@@ -31,9 +36,9 @@ Show the superblock CIDR or from a given block.
 #### Flags
 - --id or -i : specify the ID of the block to release
 - --allocate or -a : if the block does not exist, allocate it
+- --output or -o : specify the output file (used with --allocate, default is the input file)
 - --parent or -p : specify an ID for the parent block (used with --allocate)
 - --size or -s : specify the size of the block to allocate (required with --allocate)
-- --in-place : modify the input file in place (used with --allocate)
 
 ### list
 List all allocated blocks.

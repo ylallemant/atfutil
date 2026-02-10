@@ -53,12 +53,12 @@ func Command() *cobra.Command {
 }
 
 func runRelease(cmd *cobra.Command, args []string) {
-	outputFilename := viper.GetString("output-file")
-	inputFilename := viper.GetString("input-file")
+	outputFilename := viper.GetString("output")
+	inputFilename := viper.GetString("file")
 	inPlace, _ := cmd.Flags().GetBool("in-place")
 
 	if outputFilename != "-" && inPlace {
-		quitWithError(errors.New("cannot use --output-file and --in-place at the same time"))
+		quitWithError(errors.New("cannot use --output and --in-place at the same time"))
 	}
 
 	releaseCIDR, _ := cmd.Flags().GetString("cidr")

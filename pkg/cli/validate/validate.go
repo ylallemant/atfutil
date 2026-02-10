@@ -42,7 +42,7 @@ var validateCmd = &cobra.Command{
 }
 
 func init() {
-	// No validate-specific flags needed, uses global input-file flag
+	// No validate-specific flags needed, uses global file flag
 }
 
 // Command returns the validate command
@@ -51,7 +51,7 @@ func Command() *cobra.Command {
 }
 
 func runValidate(cmd *cobra.Command, args []string) {
-	inputFilename := viper.GetString("input-file")
+	inputFilename := viper.GetString("file")
 	inFile, err := getInputFile(inputFilename)
 	if err != nil {
 		quitWithError(err)
