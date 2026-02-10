@@ -3,11 +3,11 @@ package main
 import (
 	"os"
 
-	"atfutil/pkg/cli/atfutil"
+	"atfutil/pkg/cli/root"
 )
 
 func main() {
-	if err := atfutil.Command().Execute(); err != nil {
+	if err := root.Command().Execute(); err != nil {
 		os.Exit(1)
 	}
 }
