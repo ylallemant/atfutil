@@ -19,7 +19,6 @@ Allocate a block from the superblock and add it to the file.
 #### Flags
 - --size or -s : specify the size of the block to allocate (default is the block size defined in the superblock)
 - --id or -i : specify an ID for the allocated block
-- --parent or -p : specify an ID for the parent block
 - --output or -o : specify the output file (default is the input file)
 - --description or -d : optional, specify a description for the allocated block
 
@@ -37,8 +36,8 @@ Show the superblock CIDR or from a given block.
 - --id or -i : specify the ID of the block to release
 - --allocate or -a : if the block does not exist, allocate it
 - --output or -o : specify the output file (used with --allocate, default is the input file)
-- --parent or -p : specify an ID for the parent block (used with --allocate)
 - --size or -s : specify the size of the block to allocate (required with --allocate)
+- --description or -d : optional, specify a description for the allocated block
 
 ### list
 List all allocated blocks.

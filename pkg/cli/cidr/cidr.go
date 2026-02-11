@@ -47,6 +47,7 @@ func init() {
 	cidrCmd.Flags().StringP("id", "i", "", "ID of the block to show CIDR for")
 	cidrCmd.Flags().BoolP("allocate", "a", false, "if the block does not exist, allocate it")
 	cidrCmd.Flags().IntP("size", "s", -1, "size of the network to allocate (required with --allocate)")
+	cidrCmd.Flags().StringP("description", "d", "", "description for the newly allocated subnet")
 }
 
 func Command() *cobra.Command {
@@ -60,6 +61,7 @@ func runCIDR(cmd *cobra.Command, args []string) {
 	blockID, _ := cmd.Flags().GetString("id")
 	allocateIfMissing, _ := cmd.Flags().GetBool("allocate")
 	allocSize, _ := cmd.Flags().GetInt("size")
+	allocDesc, _ := cmd.Flags().GetString("description")
 
 	inFile, err := getInputFile(inputFilename)
 	if err != nil {
@@ -124,8 +126,9 @@ func runCIDR(cmd *cobra.Command, args []string) {
 	}
 
 	newAlloc := &atf.Allocation{
-		Ident:   blockID,
-		Network: &atf.IPNet{IPNet: net},
+		Ident:       blockID,
+		Network:     &atf.IPNet{IPNet: net},
+		Description: allocDesc,
 	}
 
 	atfFile.Allocations = append(atfFile.Allocations, newAlloc)
