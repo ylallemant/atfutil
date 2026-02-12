@@ -34,6 +34,7 @@ import (
 	"atfutil/pkg/cli/list"
 	"atfutil/pkg/cli/release"
 	"atfutil/pkg/cli/render"
+	"atfutil/pkg/cli/touch"
 	"atfutil/pkg/cli/validate"
 )
 
@@ -63,6 +64,7 @@ func init() {
 	rootCmd.AddCommand(release.Command())
 	rootCmd.AddCommand(cidr.Command())
 	rootCmd.AddCommand(list.Command())
+	rootCmd.AddCommand(touch.Command())
 	rootCmd.AddCommand(version.Command())
 }
 

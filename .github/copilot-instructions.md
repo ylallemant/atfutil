@@ -1,6 +1,6 @@
 # Project Context
 
-This is a command line tool to provide a simple IPAM tool for allocating and managing CIDR blocks. It uses a file to store the superblock and allocated blocks, allowing for easy tracking, efficient use and management of IP address space.
+This is a command line tool to provide a simple IPAM tool for allocating and managing CIDR blocks. It uses a file to store the superblock and allocated blocks, allowing for easy tracking, efficient use and management of IP address space. It also provides a markdown rendering of the allocated blocks, which can be useful for documentation or reporting purposes. The tool is designed to be simple and easy to use, while also providing powerful features for managing IP address space effectively.
 
 ## Key Concepts
 
