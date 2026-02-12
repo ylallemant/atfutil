@@ -51,11 +51,9 @@ func init() {
 	// Global flags
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is $HOME/.atfutil.yaml)")
 	rootCmd.PersistentFlags().StringP("file", "f", "-", "input file")
-	rootCmd.PersistentFlags().StringP("output", "o", "-", "output file")
 
 	// Bind flags to viper
 	viper.BindPFlag("file", rootCmd.PersistentFlags().Lookup("file"))
-	viper.BindPFlag("output", rootCmd.PersistentFlags().Lookup("output"))
 
 	// Add subcommands
 	rootCmd.AddCommand(validate.Command())

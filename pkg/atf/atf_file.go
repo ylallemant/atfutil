@@ -35,6 +35,7 @@ type IPNet struct {
 
 type File struct {
 	Name        *string       `yaml:"name"`
+	Description *string       `yaml:"description,omitempty"`
 	Superblock  *IPNet        `yaml:"superBlock"`
 	Allocations []*Allocation `yaml:"allocations"`
 }

@@ -38,8 +38,8 @@ import (
 
 var cidrCmd = &cobra.Command{
 	Use:   "cidr",
-	Short: "show the superblock CIDR or from a given block",
-	Long:  "show the superblock CIDR or the CIDR from a given block identified by ID",
+	Short: "show the CIDR of a block identified by ID",
+	Long:  "show the CIDR of a block identified by ID, optionally allocating it if it doesn't exist",
 	Run:   runCIDR,
 }
 
@@ -48,6 +48,9 @@ func init() {
 	cidrCmd.Flags().BoolP("allocate", "a", false, "if the block does not exist, allocate it")
 	cidrCmd.Flags().IntP("size", "s", -1, "size of the network to allocate (required with --allocate)")
 	cidrCmd.Flags().StringP("description", "d", "", "description for the newly allocated subnet")
+	cidrCmd.Flags().StringP("output", "o", "-", "output file (used with --allocate, defaults to input file)")
+
+	cidrCmd.MarkFlagRequired("id")
 }
 
 func Command() *cobra.Command {
@@ -56,7 +59,7 @@ func Command() *cobra.Command {
 
 func runCIDR(cmd *cobra.Command, args []string) {
 	inputFilename := viper.GetString("file")
-	outputFilename := viper.GetString("output")
+	outputFilename, _ := cmd.Flags().GetString("output")
 
 	blockID, _ := cmd.Flags().GetString("id")
 	allocateIfMissing, _ := cmd.Flags().GetBool("allocate")
@@ -72,11 +75,6 @@ func runCIDR(cmd *cobra.Command, args []string) {
 	atfFile, err := loadAtfFromFile(inFile)
 	if err != nil {
 		quitWithError(err)
-	}
-
-	if blockID == "" {
-		fmt.Println(atfFile.Superblock.String())
-		os.Exit(0)
 	}
 
 	var foundAlloc *atf.Allocation

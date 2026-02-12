@@ -48,6 +48,9 @@ func init() {
 	allocCmd.Flags().IntP("size", "s", -1, "size of the network to allocate")
 	allocCmd.Flags().StringP("id", "i", "", "ID for the allocated block")
 	allocCmd.Flags().StringP("description", "d", "", "description for the newly allocated subnet")
+	allocCmd.Flags().StringP("output", "o", "-", "output file (defaults to input file)")
+
+	allocCmd.MarkFlagRequired("id")
 
 	// Bind flags to viper
 	viper.BindPFlag("size", allocCmd.Flags().Lookup("size"))
@@ -61,8 +64,8 @@ func Command() *cobra.Command {
 }
 
 func runAlloc(cmd *cobra.Command, args []string) {
-	outputFilename := viper.GetString("output")
 	inputFilename := viper.GetString("file")
+	outputFilename, _ := cmd.Flags().GetString("output")
 
 	// Default output to input file
 	if outputFilename == "-" {

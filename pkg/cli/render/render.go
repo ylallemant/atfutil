@@ -46,7 +46,9 @@ var renderCmd = &cobra.Command{
 func init() {
 	// Render-specific flags
 	renderCmd.Flags().BoolP("all-blocks", "a", false, "include free blocks when rendering")
-	renderCmd.Flags().StringP("render-format", "f", "markdown", "render format (markdown)")
+	renderCmd.Flags().String("render-format", "markdown", "render format (markdown)")
+	renderCmd.Flags().StringP("output", "o", "", "output file (if not specified, outputs to terminal)")
+	renderCmd.Flags().Bool("dry", false, "output to terminal instead of file")
 
 	// Bind flags to viper
 	viper.BindPFlag("all-blocks", renderCmd.Flags().Lookup("all-blocks"))
@@ -88,12 +90,25 @@ func runRender(cmd *cobra.Command, args []string) {
 		quitWithError(errors.New("unknown render format"))
 	}
 
-	outputFilename := viper.GetString("output")
-	outFile, err := getOutputFile(outputFilename)
-	if err != nil {
-		quitWithError(err)
+	outputFilename, _ := cmd.Flags().GetString("output")
+	dry, _ := cmd.Flags().GetBool("dry")
+
+	// If no output file specified, default to dry mode (stdout)
+	if outputFilename == "" {
+		dry = true
 	}
-	defer outFile.Close()
+
+	var outFile *os.File
+	if dry {
+		outFile = os.Stdout
+	} else {
+		var err error
+		outFile, err = getOutputFile(outputFilename)
+		if err != nil {
+			quitWithError(err)
+		}
+		defer outFile.Close()
+	}
 
 	_, err = io.Copy(outFile, outBuffer)
 	if err != nil {

@@ -44,6 +44,7 @@ var touchCmd = &cobra.Command{
 func init() {
 	touchCmd.Flags().StringP("name", "n", "", "name of the superblock")
 	touchCmd.Flags().String("cidr", "", "CIDR of the superblock")
+	touchCmd.Flags().StringP("description", "d", "", "description of the superblock")
 
 	touchCmd.MarkFlagRequired("name")
 	touchCmd.MarkFlagRequired("cidr")
@@ -63,6 +64,7 @@ func runTouch(cmd *cobra.Command, args []string) {
 
 	name, _ := cmd.Flags().GetString("name")
 	cidrStr, _ := cmd.Flags().GetString("cidr")
+	description, _ := cmd.Flags().GetString("description")
 
 	// Check if file exists
 	if _, err := os.Stat(filename); err == nil {
@@ -84,6 +86,10 @@ func runTouch(cmd *cobra.Command, args []string) {
 		Name:        &name,
 		Superblock:  &atf.IPNet{IPNet: ipNet},
 		Allocations: []*atf.Allocation{},
+	}
+
+	if description != "" {
+		atfFile.Description = &description
 	}
 
 	outBytes, err := yaml.Marshal(atfFile)

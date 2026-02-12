@@ -14,6 +14,12 @@ This is a command line tool to provide a simple IPAM tool for allocating and man
 
 ## Commands
 
+### touch
+Check if a file exists and create it if missing.
+#### Flags
+- --name or -n : specify the name of the superblock
+- --cidr : specify the CIDR of the superblock
+
 ### allocate
 Allocate a block from the superblock and add it to the file.
 #### Flags
