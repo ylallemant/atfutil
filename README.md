@@ -163,7 +163,7 @@ atfutil validate -f network.atf.yaml
 
 ### render
 
-Render the allocated blocks as a markdown table.
+Render the sorted allocated blocks as a markdown table.
 
 | Flag | Short | Description |
 |------|-------|-------------|
